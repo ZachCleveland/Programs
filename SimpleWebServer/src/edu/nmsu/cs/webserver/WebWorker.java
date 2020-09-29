@@ -1,5 +1,7 @@
 package edu.nmsu.cs.webserver;
 
+import java.io.BufferedInputStream;
+
 /**
  * Web worker: an object of this class executes in its own new thread to receive and respond to a
  * single HTTP request. After the constructor the object executes on its "run" method, and leaves
@@ -33,7 +35,10 @@ import java.io.File;
 import java.io.FileNotFoundException; 
 import java.util.Scanner;
 import java.time.LocalDate;
-
+import java.awt.Image;
+import java.nio.file.Files;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 
 public class WebWorker implements Runnable
 {
@@ -61,7 +66,8 @@ public class WebWorker implements Runnable
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
 			readHTTPRequest(is);
-			writeHTTPHeader(os, "text/html");
+			
+			
 			writeContent(os);
 			os.flush();
 			socket.close();
@@ -93,7 +99,7 @@ public class WebWorker implements Runnable
 				/* So I guess right here parse stuff*/
 				if (line.contains("GET")) 
 					url = line.substring(line.indexOf("/")+1, line.indexOf("HTTP")-1) + "\n";
-				
+					
 	            
 				if (line.length() == 0)
 					break;
@@ -150,20 +156,63 @@ public class WebWorker implements Runnable
 		os.write("</body></html>\n".getBytes());
 		*/
 		
-        System.out.println(url);
 		try {
-		      File myObj = new File((System.getProperty("user.dir") + "/" + url).strip());
+			String fileType = new String(url.substring(url.lastIndexOf(".")+1)).strip();
+		//	writeHTTPHeader(os, "text/html");
+			
+			
+			
+			if (!fileType.contains("html")){
+				
+				File myObj = new File((System.getProperty("user.dir") + "/www/" + url).strip());
+			    if (myObj.exists() == false) {
+			    	writeHTTPHeader(os, "text/html");
+			    	throw new FileNotFoundException("file does not exist.");
+			    }
+				
+				writeHTTPHeader(os, "image/" + fileType);
+				System.out.print(url);
+				String filePath = new String((System.getProperty("user.dir") + "/www/" + url).strip());
+				BufferedInputStream is = new BufferedInputStream(new FileInputStream(filePath));
+				int line = is.read();
+				while (line != -1) {
+					os.write(line);
+					line = is.read();
+				
+				}
+				is.close();
+			} 
+			else {
+				
+				writeHTTPHeader(os, "text/" + fileType);
+				
+				os.write(("<link rel=\"shortcut icon\"\n" + 
+						" href=\"http://localhost:8080/res/acc/favicon.png\">").getBytes());
+			
+		      File myObj = new File((System.getProperty("user.dir") + "/www/" + url).strip());
+		      if (myObj.exists() == false) throw new FileNotFoundException("file does not exist.");
+		      
 		      Scanner myReader = new Scanner(myObj);
+		      
 		      while (myReader.hasNextLine()) {
 		        String data = myReader.nextLine();
 		        
 		        LocalDate date = LocalDate.now();
 		       	data = data.replaceAll("<cs371date>", date.toString());
 		       	data = data.replaceAll("<cs371server>", "Zach's Server");
+		        if (data.contains("src=\"")){
+		        	System.out.println((System.getProperty("user.dir") + "/" + data.indexOf("src=\"", data.indexOf("\""))).strip());
+		        }
+		       	
 		        
+		       	
 		        os.write(data.getBytes());
+		        
 		      }
-		      myReader.close();
+		      
+		      myReader.close(); 
+		      
+			}
 		    } 
 		catch (FileNotFoundException e)
 			{
