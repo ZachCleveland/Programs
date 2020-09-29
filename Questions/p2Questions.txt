@@ -1,0 +1,5 @@
+1. seven hours.
+Thought/Design: 3 hours
+Programing: 30 minutes
+Debugging: 5 hours
+3. 21% of original estimate
