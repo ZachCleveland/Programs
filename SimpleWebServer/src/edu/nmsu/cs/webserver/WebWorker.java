@@ -29,10 +29,15 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.io.File;
+import java.io.FileNotFoundException; 
+import java.util.Scanner;
+import java.time.LocalDate;
+
 
 public class WebWorker implements Runnable
 {
-
+	private String url;
 	private Socket socket;
 
 	/**
@@ -84,6 +89,12 @@ public class WebWorker implements Runnable
 					Thread.sleep(1);
 				line = r.readLine();
 				System.err.println("Request line: (" + line + ")");
+				
+				/* So I guess right here parse stuff*/
+				if (line.contains("GET")) 
+					url = line.substring(line.indexOf("/")+1, line.indexOf("HTTP")-1) + "\n";
+				
+	            
 				if (line.length() == 0)
 					break;
 			}
@@ -131,10 +142,40 @@ public class WebWorker implements Runnable
 	 *          is the OutputStream object to write to
 	 **/
 	private void writeContent(OutputStream os) throws Exception
-	{
+	{	
+		
+	/*
 		os.write("<html><head></head><body>\n".getBytes());
-		os.write("<h3>My web server works!</h3>\n".getBytes());
+		os.write("<h3>Zach's web server works!</h3>\n".getBytes());
 		os.write("</body></html>\n".getBytes());
+		*/
+		
+        System.out.println(url);
+		try {
+		      File myObj = new File((System.getProperty("user.dir") + "/" + url).strip());
+		      Scanner myReader = new Scanner(myObj);
+		      while (myReader.hasNextLine()) {
+		        String data = myReader.nextLine();
+
+		        
+		        LocalDate date = LocalDate.now();
+		       	data = data.replaceAll("<cs371date>", date.toString());
+		       	data = data.replaceAll("<cs371server>", "Zach's Server");
+		        
+		        os.write(data.getBytes());
+		      }
+		      myReader.close();
+		    } 
+		catch (FileNotFoundException e)
+			{
+		    	os.write("<html><head>\n".getBytes());
+		    	os.write("<title>404 Not Found</title>\n".getBytes());
+		    	os.write("</head><body>\n".getBytes());
+		    	os.write("<h1>404 Not Found</h1>\n".getBytes());
+		 		os.write("<p>Bad. that doesn't exist.</p>\n".getBytes()); 
+		    	os.write("</body></html>".getBytes());
+		    }
+		
 	}
 
 } // end class
