@@ -45,7 +45,7 @@ public class RacingScore2
 		else if (score2 < score1 && score2 < score3)
 		{
 			s1 = score1;
-			s2 = score2;
+			s2 = score3;  //Needed score3, not score 2, because score2 is lowest
 		}
 		else if (score3 < score1 && score3 < score2)
 		{
@@ -54,8 +54,8 @@ public class RacingScore2
 		}
 		else
 		{
-			s1 = 99;
-			s2 = 99;
+			s1 = score1; //If here, no score is lower than the other two.
+			s2 = score2; // Not sure why set to 99...just print out either two?
 		}
 		s = s1 + s2;
 		return s;
@@ -64,7 +64,7 @@ public class RacingScore2
 	public static void main(String args[])
 	{
 		int s1, s2, s3;
-		if (args == null || args.length != 3)
+		if (args.length != 3) // args will never be null.
 		{
 			System.err.println("Error: must supply three arguments!");
 			return;
