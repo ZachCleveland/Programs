@@ -74,6 +74,50 @@ public class Circle1Test
 	}
 
 
+	//
+	// Test scale down
+	//
+	@Test
+	public void simpleScaleDown()
+	{
+		System.out.println("Running test simpleScaleUp.");
+		circle1.scale(.5);
+		Assert.assertTrue(circle1.radius == 1.5);
+	}
+
+
+	//
+	// Test intersects
+	//
+	@Test
+	public void simpleTouching()
+	{
+		//very close circle
+		Circle1 circle1_1; 
+		circle1_1 = new Circle1(3, 2, 3);
+		System.out.println("Running test simpleTouching.");
+		Assert.assertTrue(circle1.intersects(circle1_1));
+
+	}
+
+
+	//
+	// Test out of bounds intersect
+	//
+	@Test
+	public void notTouching()
+	{	
+		Circle1 circle1_1; 
+		//circle out of bounds, by y axis
+		circle1_1 = new Circle1(7, 2, 3);
+		Assert.assertTrue(!circle1.intersects(circle1_1));
+
+		//circle out of bounds, by x axis
+		circle1_1 = new Circle1(3, 5, 3);
+		Assert.assertTrue(!circle1.intersects(circle1_1));
+	}
+
+
 	/***
 	 * NOT USED public static void main(String args[]) { try { org.junit.runner.JUnitCore.runClasses(
 	 * java.lang.Class.forName("Circle1Test")); } catch (Exception e) { System.out.println("Exception:

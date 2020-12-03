@@ -58,7 +58,64 @@ public class Circle2Test
 		p = circle2.moveBy(-1, -1);
 		Assert.assertTrue(p.x == 0 && p.y == 1);
 	}
+	
+	//
+	// Test scale up
+	//
+	@Test
+	public void simpleScaleUp()
+	{
+		System.out.println("Running test simpleScaleUp.");
+		circle2.scale(2.0);
+		Assert.assertTrue(circle2.radius == 6);
+	}
 
+
+	//
+	// Test scale down
+	//
+	@Test
+	public void simpleScaleDown()
+	{
+		System.out.println("Running test simpleScaleUp.");
+		circle2.scale(.5);
+		Assert.assertTrue(circle2.radius == 1.5);
+	}
+
+
+
+	//
+	// Test intersects
+	//
+	@Test
+	public void simpleTouching()
+	{
+		//very close circle
+		Circle2 circle2_1; 
+		circle2_1 = new Circle2(3, 2, 3);
+		System.out.println("Running test simpleTouching.");
+		Assert.assertTrue(circle2.intersects(circle2_1));
+
+	}
+
+	
+	
+	//
+	// Test out of bounds intersect
+	//
+	@Test
+	public void notTouching()
+	{	
+		Circle2 circle2_1; 
+		//circle out of bounds, by y axis
+		circle2_1 = new Circle2(7, 2, 3);
+		Assert.assertTrue(!circle2.intersects(circle2_1));
+
+		//circle out of bounds, by x axis
+		circle2_1 = new Circle2(3, 5, 3);
+		Assert.assertTrue(!circle2.intersects(circle2_1));
+	}
+	
 	/***
 	 * NOT USED public static void main(String args[]) { try { org.junit.runner.JUnitCore.runClasses(
 	 * java.lang.Class.forName("Circle1Test")); } catch (Exception e) { System.out.println("Exception:
