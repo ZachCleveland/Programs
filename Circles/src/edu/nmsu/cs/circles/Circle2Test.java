@@ -11,10 +11,10 @@ package edu.nmsu.cs.circles;
 
 import org.junit.*;
 
-public class Circle1Test
+public class Circle2Test
 {
 	// Data you need for each test case
-	private Circle1 circle1;
+	private Circle2 circle2;
 
 	//
 	// Stuff you want to do before each test case
@@ -23,7 +23,7 @@ public class Circle1Test
 	public void setup()
 	{
 		System.out.println("\nTest starting...");
-		circle1 = new Circle1(1, 2, 3);
+		circle2 = new Circle2(1, 2, 3);
 	}
 
 	//
@@ -35,7 +35,6 @@ public class Circle1Test
 		System.out.println("\nTest finished.");
 	}
 
-
 	//
 	// Test a simple positive move
 	//
@@ -44,10 +43,9 @@ public class Circle1Test
 	{
 		Point p;
 		System.out.println("Running test simpleMove.");
-		p = circle1.moveBy(1, 1);
+		p = circle2.moveBy(1, 1);
 		Assert.assertTrue(p.x == 2 && p.y == 3);
 	}
-
 
 	//
 	// Test a simple negative move
@@ -57,22 +55,9 @@ public class Circle1Test
 	{
 		Point p;
 		System.out.println("Running test simpleMoveNeg.");
-		p = circle1.moveBy(-1, -1);
+		p = circle2.moveBy(-1, -1);
 		Assert.assertTrue(p.x == 0 && p.y == 1);
 	}
-
-
-	//
-	// Test scale up
-	//
-	@Test
-	public void simpleScaleUp()
-	{
-		System.out.println("Running test simpleScaleUp.");
-		circle1.scale(2.0);
-		Assert.assertTrue(circle1.radius == 6);
-	}
-
 
 	/***
 	 * NOT USED public static void main(String args[]) { try { org.junit.runner.JUnitCore.runClasses(
